@@ -76,11 +76,17 @@ export default {
   },
   methods: {
     handleSubmit: function(event) {
-      // eslint-disable-next-line no-unused-vars
       const formData = new FormData(event.target);
 
-      // TODO - build the request body
-      const data = {};
+      const data = Object.fromEntries(formData);
+      data.items = [
+        {
+          quantity: formData.get("quantity"),
+          description: formData.get("description"),
+          price: formData.get("price"),
+          taxed: Boolean(formData.get("taxed"))
+        }
+      ];
 
       fetch("/billing/api/invoices/", {
         method: "POST",
