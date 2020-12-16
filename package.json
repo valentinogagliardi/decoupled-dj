@@ -1,0 +1,26 @@
+{
+  "name": "decoupled-dj",
+  "version": "1.0.0",
+  "description": "Companion repo for \"Decoupled Django\" book.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valentinogagliardi/decoupled-dj.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valentinogagliardi/decoupled-dj/issues"
+  },
+  "homepage": "https://github.com/valentinogagliardi/decoupled-dj#readme",
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "prettier": {
+    "printWidth": 60
+  }
+}
