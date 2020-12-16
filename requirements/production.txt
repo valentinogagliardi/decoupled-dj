@@ -1,0 +1,6 @@
+-r ./base.txt
+gunicorn==20.0.4
+uvicorn==0.13.1
+httptools==0.1.1
+uvloop==0.15.2
+django-monitus==1.0.0

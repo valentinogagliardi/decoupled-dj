@@ -1,0 +1,13 @@
+[Unit]
+Description=decoupleddjango gunicorn
+After=network.target
+
+[Service]
+Environment=DJANGO_SETTINGS_MODULE=decoupled_dj.settings.production
+User={{ user }}
+Group={{ user }}
+WorkingDirectory=/home/{{ user }}/code
+ExecStart=/home/{{ user }}/code/venv/bin/gunicorn decoupled_dj.asgi:application -w 2 -k uvicorn.workers.UvicornWorker -b {{ upstream_addr }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+-r ./base.txt
+model-bakery==1.2.1
+pytest==6.2.2
+pytest-django==4.1.0

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<form method="POST" action="{% url "auth:login" %}">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.username.id_for_label }}">Username:</label>
+        <input type="text" name="username" autofocus maxlength="254" required id="id_username">
+    </div>
+    <div>
+        <label for="{{ form.password.id_for_password }}">Password:</label>
+        <input type="password" name="password" autocomplete="current-password" required="" id="id_password">
+    </div>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" value="login">
+        LOGIN
+    </button>
+</form>
+{{ form.non_field_errors }}
+</body>
+</html>

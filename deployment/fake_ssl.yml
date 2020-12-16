@@ -1,0 +1,29 @@
+---
+- name: Install trustme
+  pip:
+   name: trustme
+   virtualenv: /home/{{ user }}/code/venv
+   virtualenv_python: python3.8
+  tags:
+    - trustme
+
+- name: Generate SSL certificate
+  command: /home/{{ user }}/code/venv/bin/python -m trustme \
+          -i {{ domain }} static.{{ domain }} \
+          -d /home/{{ user }}/
+  tags:
+    - trustme
+
+- name: Configure Nginx virtualhost with fake SSL certificate
+  template:
+    src=decoupled-django.com-trustme.j2
+    dest=/etc/nginx/sites-enabled/decoupled-django.com
+    backup=no
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - reload nginx
+  tags:
+    - nginx
+    - trustme
