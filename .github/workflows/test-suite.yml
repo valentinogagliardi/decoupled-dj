@@ -1,0 +1,53 @@
+---
+name: Test suite
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_DB: decoupleddjango
+          POSTGRES_USER: decoupleddjango
+          POSTGRES_PASSWORD: decoupleddjango
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    strategy:
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.9"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Upgrade pip
+        run: python -m pip install -U pip
+
+      - name: Install dependencies
+        run: pip install -r requirements/testing.txt
+
+      - name: Copy env for CI
+        run: cp decoupled_dj/settings/.env.ci decoupled_dj/settings/.env
+
+      - name: Run test suite
+        env:
+          DJANGO_SETTINGS_MODULE: decoupled_dj.settings.testing
+        run: python manage.py test

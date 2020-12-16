@@ -1,0 +1,126 @@
+---
+- hosts: target
+  vars:
+    domain: decoupled-django.com # CHANGE THIS WITH YOUR DOMAIN
+    ssl_email: your@email.here # CHANGE THIS WITH YOUR EMAIL
+    user: decoupled-django
+    upstream_addr: 127.0.0.1:8000
+    django_settings_module:
+      DJANGO_SETTINGS_MODULE: decoupled_dj.settings.production
+
+  tasks:
+    - name: Install pre-requisites
+      apt:
+        name: ["nginx", "git",
+               "python3.8", "python3-venv",
+               "virtualenv",
+               "certbot",
+               "python3-certbot-nginx"]
+        update_cache: yes
+
+    - name: Create an unprivileged user
+      user:
+        name: "{{ user }}"
+        shell: /bin/bash
+
+    - name: Deploy code
+      ansible.builtin.git:
+        repo: 'https://github.com/valentinogagliardi/decoupled-dj.git'
+        dest: /home/{{ user }}/code
+        version: chapter_06_security_deployment
+      notify:
+        - restart gunicorn
+      tags:
+        - deploy
+
+    - name: Set permissions for code folder
+      file:
+        path: /home/{{ user }}/code
+        state: directory
+        recurse: yes
+        owner: "{{ user }}"
+        group: "{{ user }}"
+      tags:
+        - deploy
+
+    - name: Configure production .env
+      ansible.builtin.command: cp decoupled_dj/settings/.env.production.example decoupled_dj/settings/.env
+      args:
+        chdir: /home/{{ user }}/code
+
+    - name: Install production dependencies in virtualenv
+      pip:
+       requirements: /home/{{ user }}/code/requirements/production.txt
+       virtualenv: /home/{{ user }}/code/venv
+       virtualenv_python: python3.8
+      tags:
+        - deploy
+
+    - name: Collect static files
+      ansible.builtin.command: venv/bin/python manage.py collectstatic --noinput
+      args:
+        chdir: /home/{{ user }}/code
+      environment: "{{ django_settings_module }}"
+      become: yes
+      become_user: "{{ user }}"
+      tags:
+        - deploy
+
+    - name: Apply migrations
+      ansible.builtin.command: venv/bin/python manage.py migrate
+      args:
+        chdir: /home/{{ user }}/code
+      environment: "{{ django_settings_module }}"
+      tags:
+        - deploy
+
+    - name: Configure Nginx virtualhost
+      template:
+        src=decoupled-django.com.j2
+        dest=/etc/nginx/sites-enabled/decoupled-django.com
+        backup=no
+        owner=root
+        group=root
+        mode=0644
+      notify:
+        - reload nginx
+      tags:
+        - nginx
+
+    - name: Deploy SSL certificate
+      command: /usr/bin/certbot --nginx -n \
+              --domain {{ domain }},static.{{ domain }} \
+              --expand --redirect --agree-tos --email {{ ssl_email }}
+      tags:
+        - nginx
+        - ssl
+
+    - name: Configure Gunicorn service in Systemd
+      template:
+        src=gunicorn-service.j2
+        dest=/etc/systemd/system/decoupled-django-gunicorn.service
+        backup=no
+        owner=root
+        group=root
+        mode=0644
+      notify:
+        - enable gunicorn
+
+  handlers:
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded
+        enabled: yes
+
+    - name: enable gunicorn
+      systemd:
+        name: decoupled-django-gunicorn
+        state: started
+        enabled: yes
+
+    - name: restart gunicorn
+      systemd:
+        name: decoupled-django-gunicorn
+        state: restarted
+        enabled: yes

@@ -1,0 +1,26 @@
+upstream gunicorn {
+    server {{ upstream_addr }};
+}
+
+server {
+    server_name {{ domain }};
+    ## If you use Let's Encrypt, SSL configuration is managed by Certbot
+    # access_log <= configure this
+    # error_log <= configure this
+
+    location / {
+        proxy_pass http://gunicorn;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    server_name static.{{ domain }};
+
+    location / {
+        alias /home/{{ user }}/code/static/;
+    }
+}
