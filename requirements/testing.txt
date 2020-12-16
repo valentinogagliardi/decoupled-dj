@@ -1,0 +1,2 @@
+-r ./base.txt
+model-bakery==1.2.1
