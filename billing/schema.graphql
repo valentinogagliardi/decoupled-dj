@@ -1,0 +1,50 @@
+enum InvoiceState {
+    PAID
+    UNPAID
+    CANCELLED
+}
+
+type User {
+    id: ID
+    name: String
+    email: String
+}
+
+type Invoice {
+    user: User
+    date: String
+    dueDate: String
+    state: InvoiceState
+    items: [ItemLine]
+}
+
+type ItemLine {
+    quantity: Int
+    description: String
+    price: Float
+    taxed: Boolean
+}
+
+type Query {
+    getClients: [User]
+    getClient(id: ID!): User
+}
+
+input ItemLineInput {
+    quantity: Int!
+    description: String!
+    price: Float!
+    taxed: Boolean!
+}
+
+input InvoiceInput {
+    user: ID!
+    date: String!
+    dueDate: String!
+    state: InvoiceState
+    items: [ItemLineInput!]!
+}
+
+type Mutation {
+    invoiceCreate(invoice: InvoiceInput!): Invoice!
+}
