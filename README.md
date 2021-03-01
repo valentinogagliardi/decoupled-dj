@@ -10,6 +10,20 @@ Companion repo for "Decoupled Django" book.
   </a>
 </p>
 
+## Project structure
+
+The root project folder has a `package.json` which is used only to have Prettier for the whole sub folders.
+
+The `billing` folder holds a Django app with. The app exposes two APIs:
+
+- a REST API
+- a GraphQL API
+
+Inside this app there are also:
+
+- a Vue.js frontend talking to the REST API
+- a React/GraphQL frontend talking to the GraphQL API
+
 ## Goodies
 
 ### Using the API with Curl
