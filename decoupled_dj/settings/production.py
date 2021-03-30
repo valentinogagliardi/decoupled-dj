@@ -28,4 +28,4 @@ EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 
 
-ADMINS = [("Your name here", "your@email.here")]
+ADMINS = [("Your name here", "your@email.here")]  # CHANGE THIS WITH YOUR EMAIL
