@@ -70,7 +70,8 @@ export default {
     return {
       users: [
         { id: 1, name: "xadrg", email: "xadrg@acme.io" },
-        { id: 2, name: "olcmf", email: "olcmf@zyx.dev" }
+        { id: 2, name: "olcmf", email: "olcmf@zyx.dev" },
+        { id: 3, name: "rlcmf", email: "rlcmf@zyx.dev" }
       ]
     };
   },
