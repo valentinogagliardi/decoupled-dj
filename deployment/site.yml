@@ -28,6 +28,8 @@
         repo: 'https://github.com/valentinogagliardi/decoupled-dj.git'
         dest: /home/{{ user }}/code
         version: chapter_06_security_deployment
+      notify:
+        - restart gunicorn
       tags:
         - deploy
 
@@ -112,4 +114,10 @@
       systemd:
         name: decoupled-django-gunicorn
         state: started
+        enabled: yes
+
+    - name: restart gunicorn
+      systemd:
+        name: decoupled-django-gunicorn
+        state: restarted
         enabled: yes
