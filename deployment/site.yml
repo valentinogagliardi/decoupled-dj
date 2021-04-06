@@ -91,6 +91,7 @@
               --expand --redirect --agree-tos --email {{ ssl_email }}
       tags:
         - nginx
+        - ssl
 
     - name: Configure Gunicorn service in Systemd
       template:
