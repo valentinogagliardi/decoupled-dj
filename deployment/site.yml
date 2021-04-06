@@ -61,6 +61,8 @@
       args:
         chdir: /home/{{ user }}/code
       environment: "{{ django_settings_module }}"
+      become: yes
+      become_user: "{{ user }}"
       tags:
         - deploy
 
