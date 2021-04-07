@@ -10,53 +10,9 @@ Companion repo for "Decoupled Django" book.
   </a>
 </p>
 
-## Goodies
-
-### Using the API with Curl
-
-Create a new invoice:
-
-```bash
-curl -X POST --location "http://127.0.0.1:8000/billing/api/invoices/" \
-    -H "Accept: */*" \
-    -H "Content-Type: application/json" \
-    -d "{
-          \"user\": 1,
-          \"date\": \"2020-12-01\",
-          \"due_date\": \"2020-12-30\"
-        }"
-```
-
-Create a new invoice with items:
-
-```bash
-curl -X POST --location "http://127.0.0.1:8000/billing/api/invoices/" \
-    -H "Accept: application/json" \
-    -H "Content-Type: application/json" \
-    -d "{
-          \"user\": 1,
-          \"date\": \"2020-12-01\",
-          \"due_date\": \"2020-12-30\",
-          \"items\": [
-            {
-              \"quantity\": 2,
-              \"description\": \"JS consulting\",
-              \"price\": 9800.00,
-              \"taxed\": false
-            },
-            {
-              \"quantity\": 1,
-              \"description\": \"Backend consulting\",
-              \"price\": 12000.00,
-              \"taxed\": true
-            }
-          ]
-        }"
-```
-
 ## Deployment
 
-To deploy the project on your machine, configure the destination host in `deployment/inventory`, and the variables at the top of `deployment/site.yml`. On your workstation, install the dependency for deployment from `requirements/deployment.txt`, then launch Ansible with the following command:
+To deploy the project on a virtual server, configure the destination host in `deployment/inventory`, and the variables at the top of `deployment/site.yml`. On your workstation, install the dependency for deployment from `requirements/deployment.txt`, then launch Ansible with the following command:
 
 ```bash
 ansible-playbook -i deployment/inventory deployment/site.yml
