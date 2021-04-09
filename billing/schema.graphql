@@ -1,6 +1,6 @@
 enum InvoiceState {
-    PAID,
-    UNPAID,
+    PAID
+    UNPAID
     CANCELLED
 }
 
