@@ -10,60 +10,17 @@ Companion repo for "Decoupled Django" book.
   </a>
 </p>
 
-## Project structure
+## Deployment
 
-The root project folder has a `package.json` which is used only to have Prettier for the whole sub folders.
-
-The `billing` folder holds a Django app with. The app exposes two APIs:
-
-- a REST API
-- a GraphQL API
-
-Inside this app there are also:
-
-- a Vue.js frontend talking to the REST API
-- a React/GraphQL frontend talking to the GraphQL API
-
-## Goodies
-
-### Using the API with Curl
-
-Create a new invoice:
+To deploy the project on a virtual server, configure the destination host in `deployment/inventory`, and the variables at the top of `deployment/site.yml`. On your workstation, install the dependency for deployment from `requirements/deployment.txt`, then launch Ansible with the following command:
 
 ```bash
-curl -X POST --location "http://127.0.0.1:8000/billing/api/invoices/" \
-    -H "Accept: */*" \
-    -H "Content-Type: application/json" \
-    -d "{
-          \"user\": 1,
-          \"date\": \"2020-12-01\",
-          \"due_date\": \"2020-12-30\"
-        }"
+ansible-playbook -i deployment/inventory deployment/site.yml
 ```
 
-Create a new invoice with items:
+If you want to skip the SSL part, run:
 
 ```bash
-curl -X POST --location "http://127.0.0.1:8000/billing/api/invoices/" \
-    -H "Accept: application/json" \
-    -H "Content-Type: application/json" \
-    -d "{
-          \"user\": 1,
-          \"date\": \"2020-12-01\",
-          \"due_date\": \"2020-12-30\",
-          \"items\": [
-            {
-              \"quantity\": 2,
-              \"description\": \"JS consulting\",
-              \"price\": 9800.00,
-              \"taxed\": false
-            },
-            {
-              \"quantity\": 1,
-              \"description\": \"Backend consulting\",
-              \"price\": 12000.00,
-              \"taxed\": true
-            }
-          ]
-        }"
+ansible-playbook -i deployment/inventory deployment/site.yml --skip-tags=ssl
 ```
+
