@@ -13,7 +13,7 @@ type User {
 type Invoice {
     user: User
     date: String
-    due_date: String
+    dueDate: String
     state: InvoiceState
     items: [ItemLine]
 }
@@ -40,7 +40,7 @@ input ItemLineInput {
 input InvoiceInput {
     user: ID!
     date: String!
-    due_date: String!
+    dueDate: String!
     state: InvoiceState
     items: [ItemLineInput!]!
 }

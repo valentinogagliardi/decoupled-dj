@@ -1,5 +1,6 @@
 from ariadne import load_schema_from_path, gql, make_executable_schema
 from ariadne import ObjectType, MutationType
+from ariadne.utils import convert_kwargs_to_snake_case
 from pathlib import Path
 from users.models import User
 from billing.models import Invoice, ItemLine
@@ -27,6 +28,7 @@ mutation = MutationType()
 
 
 @mutation.field("invoiceCreate")
+@convert_kwargs_to_snake_case
 def resolve_invoice_create(obj, info, invoice):
     user_id = invoice.pop("user")
     items = invoice.pop("items")
