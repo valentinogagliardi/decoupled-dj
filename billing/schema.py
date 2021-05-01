@@ -50,12 +50,12 @@ async def resolve_clients():
     return await sync_to_async(_get_all_clients)()
 
 
-def _get_user(id):
+def _get_client(id):
     return UserModel.objects.get(id=id)
 
 
 async def resolve_client(id: strawberry.ID):
-    return await sync_to_async(_get_user)(id)
+    return await sync_to_async(_get_client)(id)
 
 
 @strawberry.type
@@ -92,7 +92,7 @@ def _create_itemlines(invoice, item):
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def invoice_create(self, invoice: InvoiceInput) -> Invoice:
+    async def create_invoice(self, invoice: InvoiceInput) -> Invoice:
         _invoice = dataclasses.asdict(invoice)
         user_id = _invoice.pop("user")
         items = _invoice.pop("items")
