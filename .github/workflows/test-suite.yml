@@ -50,4 +50,4 @@ jobs:
       - name: Run test suite
         env:
           DJANGO_SETTINGS_MODULE: decoupled_dj.settings.testing
-        run: python manage.py test
+        run: pytest

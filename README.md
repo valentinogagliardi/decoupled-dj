@@ -53,3 +53,11 @@ curl -X POST --location "http://127.0.0.1:8000/billing/api/invoices/" \
           ]
         }"
 ```
+
+## Deployment
+
+To deploy the project on your machine, configure the destination host in `deployment/inventory`. On your workstation, install the dependency for deployment from `requirements/deployment.txt`, then launch Ansible with the following command:
+
+```bash
+ansible-playbook -i deployment/inventory deployment/site.yml
+```
