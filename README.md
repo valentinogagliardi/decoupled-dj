@@ -40,6 +40,8 @@ At page 46, it's "In Chapter 6, we see a practical example of a pseudo-decoupled
 
 At page 58, listing 5-2, `USE_TZ` is `True`, not `Tru`.
 
+At page ? typo, it should be 'python manage.py startapp users' The user is missing an 's'
+
 ### Chapter 6
 
 At page 67, it's "`POST` for sending an email to the client (you will work on this in Chapter 12)" instead of "`POST` for sending an email to the client (you will work on this in Chapter 11)".
